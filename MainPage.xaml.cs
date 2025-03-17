@@ -8,7 +8,6 @@
         Random random = new Random();
         private Contact selectedContact = null;
 
-        // Form entries
         Entry nameEntry;
         Entry phoneEntry;
         Entry emailEntry;
@@ -21,8 +20,8 @@
 
             contacts = new List<Contact>
             {
-                new Contact { Name = "Mati", Phone = "+3721234567", Email = "mati@example.com", Description = "Lapsepõlve sõber", Image = "dotnet_bot.png" },
-                new Contact { Name = "Mari", Phone = "+3727654321", Email = "mari@example.com", Description = "Kolleeg tööl", Image = "dotnet_bot.png" }
+                new Contact { Name = "Mati", Phone = "+3721234567", Email = "mati@gmail.com", Description = "Lapsepõlve sõber", Image = "dotnet_bot.png" },
+                new Contact { Name = "Mari", Phone = "+3727654321", Email = "mari@gmail.com", Description = "Kolleeg tööl", Image = "dotnet_bot.png" }
             };
 
             messageEntry = new Entry
@@ -42,7 +41,6 @@
 
             PopulateTable();
 
-            // Custom message button
             Button customMessageButton = new Button
             {
                 Text = "Saada oma sõnum",
@@ -54,7 +52,6 @@
             };
             customMessageButton.Clicked += SendCustomMessage;
 
-            // Random holiday greeting button
             Button randomHolidayButton = new Button
             {
                 Text = "Saada juhuslik pühadetervitus",
@@ -66,7 +63,6 @@
             };
             randomHolidayButton.Clicked += SendRandomHolidayGreeting;
 
-            // Buttons horizontal layout
             HorizontalStackLayout buttonsLayout = new HorizontalStackLayout
             {
                 Spacing = 10,
@@ -74,11 +70,10 @@
                 Children = { customMessageButton, randomHolidayButton }
             };
 
-            // Button to show/hide contact form
             Button addContactButton = new Button
             {
                 Text = "Lisa uus kontakt",
-                BackgroundColor = Color.FromArgb("#4CAF50"), // Green
+                BackgroundColor = Color.FromArgb("#4CAF50"),
                 TextColor = Colors.White,
                 VerticalOptions = LayoutOptions.Start,
                 HeightRequest = 50,
@@ -86,7 +81,6 @@
             };
             addContactButton.Clicked += ToggleContactForm;
 
-            // Create contact form
             nameEntry = new Entry { Placeholder = "Nimi", BackgroundColor = Colors.White, TextColor = Colors.Black };
             phoneEntry = new Entry { Placeholder = "Telefon", BackgroundColor = Colors.White, TextColor = Colors.Black, Keyboard = Keyboard.Telephone };
             emailEntry = new Entry { Placeholder = "Email", BackgroundColor = Colors.White, TextColor = Colors.Black, Keyboard = Keyboard.Email };
@@ -95,7 +89,7 @@
             Button saveContactButton = new Button
             {
                 Text = "Salvesta kontakt",
-                BackgroundColor = Color.FromArgb("#673AB7"), // Purple
+                BackgroundColor = Color.FromArgb("#673AB7"),
                 TextColor = Colors.White,
                 HeightRequest = 50
             };
@@ -106,7 +100,7 @@
                 Spacing = 10,
                 Padding = new Thickness(10),
                 BackgroundColor = Color.FromArgb("#E0E0E0"),
-                IsVisible = false, // Initially hidden
+                IsVisible = false,
                 Children = {
                     new Label { Text = "Lisa uus kontakt", FontSize = 18, FontAttributes = FontAttributes.Bold, TextColor = Colors.Black },
                     nameEntry,
@@ -147,7 +141,6 @@
                     Aspect = Aspect.AspectFill
                 };
 
-                // Gesture to change photo
                 var photoTapGesture = new TapGestureRecognizer();
                 photoTapGesture.Tapped += async (s, e) => await ChangePhoto(contact);
                 photo.GestureRecognizers.Add(photoTapGesture);
@@ -170,21 +163,17 @@
                 };
                 callButton.Clicked += (sender, e) => MakeCall(contact.Phone);
 
-                // Create the layout for the contact row
                 var layout = new HorizontalStackLayout
                 {
                     Spacing = 10,
                     Children = { photo, nameLabel, callButton }
                 };
 
-                // Create a Gesture Recognizer for the whole row to select contact
                 var rowTapGesture = new TapGestureRecognizer();
                 rowTapGesture.Tapped += (s, e) => SelectContact(contact);
 
-                // Add the row tap gesture to the row layout
                 layout.GestureRecognizers.Add(rowTapGesture);
 
-                // Add the layout to the table section
                 var viewCell = new ViewCell { View = layout };
                 tableSection.Add(viewCell);
             }
@@ -198,7 +187,6 @@
         {
             selectedContact = contact;
 
-            // Optionally, give feedback to the user that the contact has been selected
             DisplayAlert("Kontakt valitud", $"Valisid kontakti {contact.Name}", "OK");
         }
 
@@ -285,7 +273,7 @@
                     }
 
                     contact.Image = localPath;
-                    PopulateTable(); // Refresh UI
+                    PopulateTable();
                 }
             }
             catch (Exception ex)
@@ -294,7 +282,6 @@
             }
         }
 
-        // New method for sending custom message
         private async void SendCustomMessage(object? sender, EventArgs e)
         {
             string message = messageEntry.Text;
@@ -325,7 +312,6 @@
             }
         }
 
-        // Renamed and updated holiday greeting method
         private async void SendRandomHolidayGreeting(object? sender, EventArgs e)
         {
             var holidayGreetings = new List<string>
@@ -349,13 +335,11 @@
 
                 if (sendSms)
                 {
-                    // Override the message entry with the random greeting
                     messageEntry.Text = randomGreeting;
                     SendSms(randomContact.Phone);
                 }
                 else
                 {
-                    // Override the message entry with the random greeting
                     messageEntry.Text = randomGreeting;
                     SendEmail(randomContact.Email);
                 }
@@ -366,10 +350,8 @@
             }
         }
 
-        // Toggle contact form visibility
         private void ToggleContactForm(object sender, EventArgs e)
         {
-            // Find the contact form in the visual tree (it's the 5th child in our layout)
             if (Content is ScrollView scrollView &&
                 scrollView.Content is StackLayout mainLayout &&
                 mainLayout.Children.Count >= 5 &&
@@ -378,13 +360,11 @@
                 isFormVisible = !isFormVisible;
                 contactForm.IsVisible = isFormVisible;
 
-                // Change button text based on form visibility
                 if (sender is Button button)
                 {
                     button.Text = isFormVisible ? "Peida vorm" : "Lisa uus kontakt";
                 }
 
-                // Clear form fields if hiding
                 if (!isFormVisible)
                 {
                     ClearContactForm();
@@ -392,7 +372,6 @@
             }
         }
 
-        // Clear contact form
         private void ClearContactForm()
         {
             nameEntry.Text = string.Empty;
@@ -401,10 +380,8 @@
             descriptionEntry.Text = string.Empty;
         }
 
-        // Save new contact
         private async void SaveNewContact(object sender, EventArgs e)
         {
-            // Validate input
             if (string.IsNullOrWhiteSpace(nameEntry.Text) ||
                 string.IsNullOrWhiteSpace(phoneEntry.Text) ||
                 string.IsNullOrWhiteSpace(emailEntry.Text))
@@ -413,23 +390,19 @@
                 return;
             }
 
-            // Create new contact
             Contact newContact = new Contact
             {
                 Name = nameEntry.Text,
                 Phone = phoneEntry.Text,
                 Email = emailEntry.Text,
                 Description = descriptionEntry.Text ?? "",
-                Image = "dotnet_bot.png" // Default image
+                Image = "dotnet_bot.png"
             };
 
-            // Add to contacts list
             contacts.Add(newContact);
 
-            // Refresh the table
             PopulateTable();
 
-            // Clear and hide the form
             ClearContactForm();
 
             if (Content is ScrollView scrollView &&
@@ -440,14 +413,12 @@
                 contactForm.IsVisible = false;
                 isFormVisible = false;
 
-                // Update button text
                 if (mainLayout.Children[3] is Button addButton)
                 {
                     addButton.Text = "Lisa uus kontakt";
                 }
             }
 
-            // Show confirmation
             await DisplayAlert("Info", $"Kontakt {newContact.Name} on lisatud!", "OK");
         }
     }
