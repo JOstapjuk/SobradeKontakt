@@ -35,11 +35,9 @@ namespace SobradeKontakt
             {
                 if (grantResults.Length > 0 && grantResults[0] == Permission.Granted)
                 {
-                    // Permission granted, now you can use the camera
                 }
                 else
                 {
-                    // Permission denied, show a message
                     Android.Widget.Toast.MakeText(this, "Kaamera kasutamine on keelatud!", Android.Widget.ToastLength.Long)?.Show();
                 }
             }

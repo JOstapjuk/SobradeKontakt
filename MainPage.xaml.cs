@@ -41,21 +41,10 @@
 
             PopulateTable();
 
-            Button customMessageButton = new Button
-            {
-                Text = "Saada oma sõnum",
-                BackgroundColor = Color.FromArgb("#2196F3"), // Blue
-                TextColor = Colors.White,
-                VerticalOptions = LayoutOptions.Start,
-                HeightRequest = 50,
-                Margin = new Thickness(0, 10, 0, 5)
-            };
-            customMessageButton.Clicked += SendCustomMessage;
-
             Button randomHolidayButton = new Button
             {
                 Text = "Saada juhuslik pühadetervitus",
-                BackgroundColor = Color.FromArgb("#FF9800"), // Orange
+                BackgroundColor = Color.FromArgb("#FF9800"),
                 TextColor = Colors.White,
                 VerticalOptions = LayoutOptions.Start,
                 HeightRequest = 50,
@@ -67,7 +56,7 @@
             {
                 Spacing = 10,
                 HorizontalOptions = LayoutOptions.Fill,
-                Children = { customMessageButton, randomHolidayButton }
+                Children = { randomHolidayButton }
             };
 
             Button addContactButton = new Button
@@ -159,19 +148,38 @@
                     BackgroundColor = Color.FromArgb("#4CAF50"),
                     TextColor = Colors.White,
                     HeightRequest = 40,
-                    WidthRequest = 100
+                    WidthRequest = 80
                 };
                 callButton.Clicked += (sender, e) => MakeCall(contact.Phone);
+
+                var smsButton = new Button
+                {
+                    Text = "SMS",
+                    BackgroundColor = Color.FromArgb("#2196F3"), 
+                    TextColor = Colors.White,
+                    HeightRequest = 40,
+                    WidthRequest = 80
+                };
+                smsButton.Clicked += (sender, e) => SendSms(contact.Phone);
+
+                var emailButton = new Button
+                {
+                    Text = "Email",
+                    BackgroundColor = Color.FromArgb("#FF9800"),
+                    TextColor = Colors.White,
+                    HeightRequest = 40,
+                    WidthRequest = 80
+                };
+                emailButton.Clicked += (sender, e) => SendEmail(contact.Email);
 
                 var layout = new HorizontalStackLayout
                 {
                     Spacing = 10,
-                    Children = { photo, nameLabel, callButton }
+                    Children = { photo, nameLabel, callButton, smsButton, emailButton }
                 };
 
                 var rowTapGesture = new TapGestureRecognizer();
                 rowTapGesture.Tapped += (s, e) => SelectContact(contact);
-
                 layout.GestureRecognizers.Add(rowTapGesture);
 
                 var viewCell = new ViewCell { View = layout };
@@ -181,7 +189,6 @@
             tableView.Root.Clear();
             tableView.Root.Add(tableSection);
         }
-
 
         private void SelectContact(Contact contact)
         {
